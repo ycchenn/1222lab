@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dice Roll and Probability</title>
+</head>
+<body>
+
+  <button onclick="rollAndDisplay()">Roll Dice</button>
+
+  <div id="diceImages">
+    <!-- Placeholder for dice images -->
+  </div>
+
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Dice 1</th>
+        <th>Dice 2</th>
+      </tr>
+    </thead>
+    <tbody id="diceResults">
+      <!-- Dice results will be displayed here -->
+    </tbody>
+  </table>
+
+  <br>
+
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Face</th>
+        <th>Probability (%)</th>
+      </tr>
+    </thead>
+    <tbody id="probabilityTable">
+      <!-- Probability results will be displayed here -->
+    </tbody>
+  </table>
+
+  <script>
+    function rollDice() {
+      const diceFaces = 6;
+      const result1 = Math.floor(Math.random() * diceFaces) + 1;
+      const result2 = Math.floor(Math.random() * diceFaces) + 1;
+      return [result1, result2];
+    }
+
+    function displayImages(results) {
+      const diceImagesDiv = document.getElementById("diceImages");
+      diceImagesDiv.innerHTML = "";
+
+      results.forEach(result => {
+        const image = document.createElement("img");
+        image.src = `dice-face-${result}.png`; // Assuming the images are named dice-face-1.png, dice-face-2.png, etc.
+        image.alt = `Dice ${result}`;
+        image.style.width = "50px"; // Adjust the width as needed
+        diceImagesDiv.appendChild(image);
+      });
+    }
+
+    function displayResults(results) {
+      const diceResultsTable = document.getElementById("diceResults");
+      const row = document.createElement("tr");
+
+      results.forEach(result => {
+        const cell = document.createElement("td");
+        cell.textContent = result;
+        row.appendChild(cell);
+      });
+
+      diceResultsTable.innerHTML = "";
+      diceResultsTable.appendChild(row);
+    }
+
+    function calculateProbability(results) {
+  const totalRolls = results.length;
+  const probabilities = {};
+
+  for (let i = 1; i <= 6; i++) {
+    const count = results.filter(result => result === i).length;
+    probabilities[i] = (count / totalRolls) * 100;
+  }
+
+  return probabilities;
+}
+
+function displayProbability(probabilities) {
+  const probabilityTable = document.getElementById("probabilityTable");
+  probabilityTable.innerHTML = "";
+
+  for (const face in probabilities) {
+    const row = document.createElement("tr");
+    const cellFace = document.createElement("td");
+    const cellProbability = document.createElement("td");
+
+    cellFace.textContent = face;
+    cellProbability.textContent = probabilities[face].toFixed(2);
+
+    row.appendChild(cellFace);
+    row.appendChild(cellProbability);
+    probabilityTable.appendChild(row);
+  }
+}
+
+    function rollAndDisplay() {
+      const diceResults = rollDice();
+      const probabilities = calculateProbability(diceResults);
+
+      displayImages(diceResults);
+      displayResults(diceResults);
+      displayProbability(probabilities);
+    }
+  </script>
+
+</body>
+</html>
